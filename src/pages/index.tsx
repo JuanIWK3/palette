@@ -4,36 +4,48 @@ import { signIn, signOut, useSession } from "next-auth/react";
 import { trpc } from "../utils/trpc";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
+import { PaletteItem } from "../components/PaletteItem";
+import { IPalette } from "../types";
 
 const Home: NextPage = () => {
   const { data: sessionData } = useSession();
   const router = useRouter();
-  const [palettes, setPalettes] = useState([
+  const [palettes, setPalettes] = useState<IPalette[]>([
     {
+      id: "1",
       name: "Monochrome",
       colors: ["#fff", "#000", "#555"],
     },
     {
+      id: "2",
       name: "Colorful",
       colors: ["pink", "yellow", "lightgreen", "orangered"],
     },
     {
-      name: "Shades of blue",
-      colors: ["blue", "darkblue", "teal", "aqua", "lightblue"],
-    },
-    {
-      name: "Monochrome",
-      colors: ["#fff", "#000", "#555"],
-    },
-    {
-      name: "Colorful",
-      colors: ["pink", "yellow", "lightgreen", "orangered"],
-    },
-    {
+      id: "3",
       name: "Shades of blue",
       colors: ["blue", "darkblue", "teal", "aqua", "lightblue"],
     },
   ]);
+  const [usersPalettes, setUsersPalettes] = useState<IPalette[]>([
+    {
+      id: "4",
+      name: "Monochrome",
+      colors: ["#fff", "#000", "#555"],
+    },
+    {
+      id: "5",
+      name: "Colorful",
+      colors: ["pink", "yellow", "lightgreen", "orangered"],
+    },
+    {
+      id: "6",
+      name: "Shades of blue",
+      colors: ["blue", "darkblue", "teal", "aqua", "lightblue"],
+    },
+  ]);
+
+  const [selPal, setSelPal] = useState("1");
 
   useEffect(() => {
     // Wait for session
@@ -60,23 +72,34 @@ const Home: NextPage = () => {
           <div className="subtitle absolute left-2 -top-3.5 bg-white px-2">
             Your palettes
           </div>
+          <div className="subtitle absolute right-2 -top-3.5 cursor-pointer rounded bg-white px-2 hover:bg-purple-200">
+            Add new
+          </div>
           <div className="palettes scrollbar-rounded-lg flex gap-6 overflow-auto  p-4 pb-8 scrollbar scrollbar-thumb-gray-200 ">
             {palettes.map((palette, index) => (
-              <div
+              <PaletteItem
+                setSelPal={setSelPal}
+                isMine={true}
+                palette={palette}
                 key={index}
-                className="palette cursor-pointer rounded bg-gray-200 p-4 hover:bg-purple-200"
-              >
-                <div>{palette.name}</div>
-                <div className="colors flex gap-2">
-                  {palette.colors.map((color, i) => (
-                    <div
-                      key={i}
-                      className="border-1 h-4 w-4 rounded-lg border-black"
-                      style={{ backgroundColor: color }}
-                    ></div>
-                  ))}
-                </div>
-              </div>
+                selected={palette.id === selPal}
+              />
+            ))}
+          </div>
+        </div>
+        <div className="users border-gray relative mt-8 border-2">
+          <div className="subtitle absolute left-2 -top-3.5 bg-white px-2">
+            Users Palettes
+          </div>
+          <div className="palettes scrollbar-rounded-lg flex gap-6 overflow-auto  p-4 pb-8 scrollbar scrollbar-thumb-gray-200 ">
+            {usersPalettes.map((palette, index) => (
+              <PaletteItem
+                setSelPal={setSelPal}
+                isMine={false}
+                palette={palette}
+                key={index}
+                selected={palette.id === selPal}
+              />
             ))}
           </div>
         </div>
