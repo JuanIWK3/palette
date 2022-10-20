@@ -103,6 +103,28 @@ const Home: NextPage = () => {
             ))}
           </div>
         </div>
+        <div className="visualizer flex">
+          <hr />
+          <div className="code">code</div>
+          <hr />
+          <div
+            className="radial"
+            onClick={() => {
+              let arr: any[] = [];
+              const n = palettes[0]?.colors.length!;
+              // arr.push(`${palettes[0]?.colors[0]} ${360 / n}deg`);
+              for (let i = 0; i < palettes[0]!.colors.length; i++) {
+                // if (i < 1) continue;
+                const c = palettes[0]!.colors[i];
+                arr.push(`${c} ${(360 / n) * i}deg`);
+              }
+
+              arr.push(`${palettes[0]?.colors[n - 1]} ${(360 / n) * n}deg`);
+              console.log(arr);
+            }}
+          ></div>
+          <hr />
+        </div>
       </main>
     </>
   );
